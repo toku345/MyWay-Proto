@@ -6,16 +6,25 @@ require 'time'
 class MyWay < Sinatra::Base
   set :root, File.expand_path('../../', __FILE__)
 
-  get '/' do
-    files = [
-      {
-        name: 'sample.jpg',
-        updated: Date.parse('2014/01/01 12:00'),
-        file_type: 'jpg',
-        file_url: '/'
-      }
-    ]
-    erb :index, :locals => { files: files }
+  ['/home', '/home/*'].each do |route|
+    get route do
+      p params[:splat]
+      
+      @files = [
+        {
+          name: 'sample.jpg',
+          updated: Date.parse('2014/01/01 12:00'),
+          file_type: 'jpg',
+          file_url: '/'
+        }
+      ]
+
+      files = Dir.glob('./upload/*') do |file|
+        # p file
+      end
+
+      erb :index
+    end
   end
 
   get '/upload' do
@@ -34,5 +43,9 @@ class MyWay < Sinatra::Base
     end
 
     erb :upload
+  end
+
+  get '/' do
+    redirect '/home'
   end
 end
