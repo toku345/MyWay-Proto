@@ -55,5 +55,27 @@ Icon
 .Spotlight-V100
 .Trashes
 
+### Node ###
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+npm-debug.log
+node_modules
+
+### Bower ###
+bower_components
+
+
 # add myself
 upload/*
+public/vendor

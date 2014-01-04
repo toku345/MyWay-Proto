@@ -8,8 +8,6 @@ class MyWay < Sinatra::Base
 
   ['/home', '/home/*'].each do |route|
     get route do
-      p params[:splat]
-      
       @files = [
         {
           name: 'sample.jpg',

@@ -1,0 +1,14 @@
+{
+  "name": "myWay",
+  "version": "0.0.1",
+  "description": "My Way",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "toku345",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-bower-task": "~0.3.4"
+  }
+}
