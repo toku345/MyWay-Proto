@@ -2,12 +2,21 @@
 require 'sinatra/base'
 require 'ostruct'
 require 'time'
+require 'json'
+
+require 'pp'
 
 class MyWay < Sinatra::Base
   set :root, File.expand_path('../../', __FILE__)
 
   ['/home', '/home/*'].each do |route|
     get route do
+      unless params[:splat].nil?
+        @pwd = params[:splat][0]
+      else
+        @pwd = '/'
+      end
+
       @files = [
         {
           name: 'sample.jpg',
@@ -30,6 +39,14 @@ class MyWay < Sinatra::Base
   end
 
   post '/upload' do
+    request.body.rewind
+    request_body = request.body.read
+    p request_body
+    unless request_body.nil?
+      # request_payload = JSON.parse request_body
+      # p request_payload
+    end
+
     if params[:file]
       upload_path = "./upload/#{params[:file][:filename]}"
       File.open(upload_path, "wb") do |f|

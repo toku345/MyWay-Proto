@@ -1,30 +1,62 @@
-<h1>My Way!!</h1>
+<script type="text/javascript">
+  var MyWayAppCtrl = function($scope) {
+    $scope.pwd = '<%= @pwd %>';
+  };
+</script>
 
-<% if @files %>
-  <% @files.each do |file| %>
-    <%= file %>
+<div ng-controller="MyWayAppCtrl">
+  pwd: {{ pwd }}
+  <h1>My Way!!</h1>
+
+  <% if @files %>
+    <% @files.each do |file| %>
+      <%= file %>
+    <% end %>
   <% end %>
-<% end %>
 
-<div ng-controller="ModalDemoCtrl">
-  <script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-header">
-      <h3>I'm a modal</h3>
-    </div>
-    <div class="modal-body">
-      <ul>
-        <li ng-repeat="item in items">
-          <a ng-click="selected.item = item">{{ item }}</a>
-        </li>
-      </ul>
-      selected: <b>{{ selected.item }}</b>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" ng-click="ok()">OK</button>
-      <button class="btn btn-warning" ng-click="cancel()">Calcel</button>
-    </div>
-  </script>
+  <div ng-controller="ModalDemoCtrl">
+    <script type="text/ng-template" id="myModalContent.html">
+      <div class="modal-header">
+        <h3>I'm a modal</h3>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li ng-repeat="item in items">
+            <a ng-click="selected.item = item">{{ item }}</a>
+          </li>
+        </ul>
+        selected: <b>{{ selected.item }}</b>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Calcel</button>
+      </div>
+    </script>
 
-  <button class="btn btn-default" ng-click="open()">Open me!</button>
-  <div ng-show="selected">Selection from modal: {{ selected }}</div>
-</div>
+    <button class="btn btn-default" ng-click="open()">Open me!</button>
+    <div ng-show="selected_">Selection from modal: {{ selected_ }}</div>
+  </div>
+
+  <div ng-controller="DirCreateModalCtrl">
+    <script type="text/ng-template" id="dirCreateContent.html">
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h3>フォルダ作成</h3>
+        </div>
+        <div class="modal-body">
+          <input type="text" ng-model="input.dir_name" class="form-control" placeholder="フォルダ名"/>
+          input: <b>{{ input.dir_name }}</b>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" ng-click="ok()">作成</button>
+          <button class="btn btn-warning" ng-click="cancel()">キャンセル</button>
+          <input type="submit" class="btn btn-primary" value="フォルダ作成" name="submit"/>
+        </div>
+      </form>
+    </script>
+
+    <button class="btn btn-default" ng-click="open()">フォルダ作成</button>
+    <div ng-show="input_dir_name">Input: {{ input_dir_name }}</div>
+  </div>
+  
+</div><!-- /ng-contoller="MyWayAppCtrl" -->
