@@ -1,36 +1,32 @@
 # coding: utf-8
 require 'sinatra/base'
-require 'ostruct'
+# require 'ostruct'
 require 'time'
 require 'json'
 
-require 'pp'
+# require 'pp'
 
 class MyWay < Sinatra::Base
   set :root, File.expand_path('../../', __FILE__)
 
-  ['/home', '/home/*'].each do |route|
-    get route do
-      unless params[:splat].nil?
-        @pwd = params[:splat][0]
-      else
-        @pwd = '/'
-      end
+  before do
+    @pwd   = ''
+    @files = []
+  end
 
-      @files = [
-        {
-          name: 'sample.jpg',
-          updated: Date.parse('2014/01/01 12:00'),
-          file_type: 'jpg',
-          file_url: '/'
-        }
-      ]
+  get '/home/?' do
+    set_file_info('./upload')
+    erb :index
+  end
 
-      files = Dir.glob('./upload/*') do |file|
-        # p file
-      end
-
+  get '/home/*' do
+    @pwd   = params[:splat][0].gsub('..', '')
+    if Dir.exists?("./upload/#{@pwd}")
+      set_file_info("./upload/#{@pwd}")
       erb :index
+    else
+      # 仮
+      [404, "page not found"]
     end
   end
 
@@ -39,14 +35,6 @@ class MyWay < Sinatra::Base
   end
 
   post '/upload' do
-    request.body.rewind
-    request_body = request.body.read
-    p request_body
-    unless request_body.nil?
-      # request_payload = JSON.parse request_body
-      # p request_payload
-    end
-
     if params[:file]
       upload_path = "./upload/#{params[:file][:filename]}"
       File.open(upload_path, "wb") do |f|
@@ -60,7 +48,27 @@ class MyWay < Sinatra::Base
     erb :upload
   end
 
+  post '/create_dir' do
+    p params#['dir_name']
+    dir_name = params['dir_name']
+    pwd      = params['pwd']
+
+    # [200, "ok"]
+  end
+
   get '/' do
     redirect '/home'
+  end
+
+  private
+  def set_file_info(dir_path)
+    Dir.glob("#{dir_path}/*") do |file|
+      @files << {
+        basename: File.basename(file),
+        mime_type: mime_type(File.extname(file)),
+        updated_at: File.mtime(file),
+        file_path: file
+      }
+    end
   end
 end

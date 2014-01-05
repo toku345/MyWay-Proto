@@ -2,7 +2,7 @@
 // app.js
 //
 
-angular.module('MyWayApp', ['ui.bootstrap', 'angularFileUpload']);
+angular.module('MyWayApp', ['ui.bootstrap']);
 
 var ModalDemoCtrl = function($scope, $modal, $log) {
 
@@ -69,8 +69,17 @@ var DirCreateModalCtrl = function($scope, $modal, $log, $http) {
     modalInstance.result.then(
       function(dir_name) {
         $scope.input_dir_name = dir_name;
-        $http.post('/upload', {dir_name: $scope.input_dir_name, pwd: $scope.pwd}).success(function() {
-          $log.info("post sucess at: " + new Date());
+        $http({
+          url: '/create_dir',
+          method: 'POST',
+          data: "dir_name=" + $scope.input_dir_name + "&pwd=" + $scope.pwd,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+          }
+        }).success(function(data, status, headers, config) {
+          $log.info("post success at: " + new Date());
+        }).error(function(data, status, headers, config) {
+          $log.info("post error at: " + new Date());
         });
       },
       function() {
