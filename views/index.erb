@@ -1,75 +1,69 @@
 <script type="text/javascript">
-  var MyWayAppCtrl = function($scope) {
-    $scope.pwd = '<%= @pwd %>';
-    <% if @files %>
-      $scope.files = [];
-      <% @files.each do |file| %>
+  var MyWayAppCtrl = function($scope, $http, $location) {
+  <!-- $scope.pwd = 'home/<%= @pwd %>'; -->
+    $scope.location = $location.path();
+    $scope.files = [];
+    $http({
+      method: 'GET',
+      url: $scope.location
+    }).
+    success(function(data, status, headers, config) {
+      console.log("success!");
+      console.log(data);
+      for (var i in data) {
         $scope.files.push({
-          name: '<%= file[:basename] %>',
-          mime_type: '<%= file[:mime_type] %>',
-          updated_at: '<%= file[:updated_at] %>',
-          file_path: '<%= file[:file_path] %>'
+          name: data[i].basename,
+          mime_type: data[i].mime_type,
+          modified: data[i].modified,
+          file_path: data[i].file_path
         });
-      <% end %>
-      console.dir($scope.files);
-    <% end %>
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log("error!");
+    });
   };
 </script>
 
-<div ng-controller="MyWayAppCtrl">
-  pwd: {{ pwd }}
-  <h1>My Way!!</h1>
 
-  <% if @files %>
-    <div ng-repeat="file in files">
-      <ul>
-        <li>{{ file.name }}</li>
-        <li>{{ file.mime_type }}</li>
-        <li>{{ file.updated_at }}</li>
-        <li>{{ file.file_path }}</li>
+<div class="container">
+
+  <div class="page-header">
+    <h1>My Way</h1>
+    <p class="lead">your local file server</p>
+  </div>
+
+  <div ng-controller="MyWayAppCtrl">
+    <h1>{{ pwd }}</h1>
+
+    <% if @files %>
+      <ul ng-repeat="file in files" class="browse">
+        <li class="row">
+          <div class="col-md-4 filename"><a href='{{ file.file_path }}'>{{ file.name }}</a></div>
+          <div class="col-md-4 kind">{{ file.mime_type }}</div>
+          <div class="col-md-4 modified">{{ file.modified }}</div>
+        </li>
       </ul>
+    <% end %>
+
+    <div ng-controller="DirCreateModalCtrl">
+      <script type="text/ng-template" id="dirCreateContent.html">
+        <div class="modal-header">
+          <h3>フォルダ作成</h3>
+        </div>
+        <div class="modal-body">
+          <input type="text" ng-model="input.dir_name" class="form-control" placeholder="フォルダ名"/>
+          input: <b>{{ input.dir_name }}</b>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" ng-click="ok()">作成</button>
+          <button class="btn btn-warning" ng-click="cancel()">キャンセル</button>
+        </div>
+      </script>
+
+      <button class="btn btn-default" ng-click="open()">フォルダ作成</button>
+      <div ng-show="input_dir_name">Input: {{ input_dir_name }}</div>
     </div>
-  <% end %>
+  </div><!-- /ng-contoller="MyWayAppCtrl" -->
 
-  <div ng-controller="ModalDemoCtrl">
-    <script type="text/ng-template" id="myModalContent.html">
-      <div class="modal-header">
-        <h3>I'm a modal</h3>
-      </div>
-      <div class="modal-body">
-        <ul>
-          <li ng-repeat="item in items">
-            <a ng-click="selected.item = item">{{ item }}</a>
-          </li>
-        </ul>
-        selected: <b>{{ selected.item }}</b>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Calcel</button>
-      </div>
-    </script>
-
-    <button class="btn btn-default" ng-click="open()">Open me!</button>
-    <div ng-show="selected_">Selection from modal: {{ selected_ }}</div>
-  </div>
-
-  <div ng-controller="DirCreateModalCtrl">
-    <script type="text/ng-template" id="dirCreateContent.html">
-      <div class="modal-header">
-        <h3>フォルダ作成</h3>
-      </div>
-      <div class="modal-body">
-        <input type="text" ng-model="input.dir_name" class="form-control" placeholder="フォルダ名"/>
-        input: <b>{{ input.dir_name }}</b>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">作成</button>
-        <button class="btn btn-warning" ng-click="cancel()">キャンセル</button>
-      </div>
-    </script>
-
-    <button class="btn btn-default" ng-click="open()">フォルダ作成</button>
-    <div ng-show="input_dir_name">Input: {{ input_dir_name }}</div>
-  </div>
-</div><!-- /ng-contoller="MyWayAppCtrl" -->
+</div><!-- /.container -->
