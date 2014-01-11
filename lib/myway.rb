@@ -28,7 +28,7 @@ class MyWay < Sinatra::Base
         halt erb(:index)
       when 'text/json', 'application/json'
         set_file_info(BASE_FILE_PATH, @pwd)
-        halt @files.to_json
+        halt json @files
       end
       error 406
     end
@@ -46,7 +46,7 @@ class MyWay < Sinatra::Base
             halt erb(:index)
           when 'text/json', 'application/json'
             set_file_info(BASE_FILE_PATH, @pwd)
-            halt @files.to_json
+            halt json @files
           end
           error 406
         end

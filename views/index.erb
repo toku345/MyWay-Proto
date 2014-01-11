@@ -5,11 +5,13 @@
     $scope.files = [];
     $http({
       method: 'GET',
-      url: $scope.location
+      url: $scope.location,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
     }).
     success(function(data, status, headers, config) {
       console.log("success!");
-      console.log(data);
       for (var i in data) {
         $scope.files.push({
           name: data[i].basename,
