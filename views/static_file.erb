@@ -1,0 +1,17 @@
+<div>
+  <div>
+    <h2><%= name %></h2>
+    <a href="<%= parent_uri %>" class="btn btn-primary">戻る</a>
+  </div>
+  <div>
+    <!-- <% if type =~ /pdf/ %> -->
+    <!--   <object data="<%= uri %>" > -->
+    <!--     <p>ご覧の環境では、object要素がサポートされていないようです。</p> -->
+    <!--     <a href="<%= uri %>">PDFファイルをサポートしてください。</a> -->
+    <!--   </object> -->
+    <!-- <% else %> -->
+    <!--   <img src="<%= uri %>" alt="<%= name %>"> -->
+    <!-- <% end %> -->
+    <object data="<%= uri %>" type="<%= type %>"></object>
+  </div>
+</div>

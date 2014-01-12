@@ -2,10 +2,10 @@
 require 'sinatra/base'
 require 'sinatra/json'
 # require 'ostruct'
-require 'time'
+# require 'time'
 require 'json'
 
-require 'pp'
+# require 'pp'
 
 BASE_FILE_PATH = './upload/home'
 
@@ -52,12 +52,17 @@ class MyWay < Sinatra::Base
         end
       else
         # File
-        send_file("#{BASE_FILE_PATH}/#{@pwd}")
+        view_static_file("#{BASE_FILE_PATH}/#{@pwd}")
       end
     else
       # 仮
       [404, "page not found"]
     end
+  end
+
+  get '/file/home/*' do
+    @pwd = params[:splat][0].gsub('..', '')
+    send_file("#{BASE_FILE_PATH}/#{@pwd}")
   end
 
   get '/upload' do
@@ -95,16 +100,12 @@ class MyWay < Sinatra::Base
 
   private
   def set_file_info(base_path, pwd)
-
     if pwd.empty?
       search_path = "#{base_path}/*"
     else
       search_path = "#{base_path}/#{pwd}/*"
     end
     Dir.glob(search_path) do |file|
-
-puts file
-
       @files << {
         basename: File.basename(file),
         mime_type: mime_type(File.extname(file)) || "folder",
@@ -112,5 +113,13 @@ puts file
         file_path: file.gsub("#{base_path}/", '/home/')
       }
     end
+  end
+
+  def view_static_file(file_path)
+    file_name  = File.basename(file_path)
+    mime_type  = mime_type(File.extname(file_path))
+    uri        = file_path.gsub('./upload', '/file')
+    parent_uri = File.dirname(file_path).gsub('./upload', '')
+    halt erb "static_file".to_sym, :locals => { uri: uri, name: file_name, type: mime_type, parent_uri: parent_uri }
   end
 end
