@@ -24,9 +24,20 @@ var DirCreateModalCtrl = function($scope, $modal, $log, $http) {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
           }
-        }).success(function(data, status, headers, config) {
+        }).
+        success(function(data, status, headers, config) {
           $log.info("post success at: " + new Date());
-        }).error(function(data, status, headers, config) {
+          $scope.$parent.files = [];
+          for (var i in data) {
+            $scope.$parent.files.push({
+              name: data[i].basename,
+              mime_type: data[i].mime_type,
+              modified: data[i].modified,
+              file_path: data[i].file_path
+            });
+          }
+        }).
+        error(function(data, status, headers, config) {
           $log.info("post error at: " + new Date());
         });
       },

@@ -15,17 +15,36 @@
   padding-top: 15px;
   padding-bottom: 15px;
   /* background-color: #eee; */
-  border: 1px solid #ddd;
-  background-color: rgba(128,128,128,.1);
-  border: 1px solid rgba(86,61,124,.2);
+  /* border: 1px solid #ddd; */
+  /* background-color: rgba(128,128,128,.1); */
+  /* border: 1px solid rgba(86,61,124,.2); */
 }
 
 .browse {
   list-style: none;
-  margin-bottom: 0;
+  /* margin-bottom: 0; */
   line-height: 2em;
 }
 
-.browse filename {
-  
+/* .browse-line { */
+/*     border-bottom:1px solid rgba(86,61,124,.2); */
+/* } */
+
+.filename {
+  border-bottom:1px solid rgba(86,61,124,.2);
+}
+
+.kind {
+  border-bottom:1px solid rgba(86,61,124,.2);
+}
+
+.modified {
+  border-bottom:1px solid rgba(86,61,124,.2);
+}
+
+.dir-list {
+    font-size: 2em;
+}
+
+.dir-list .dir-link {
 }

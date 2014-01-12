@@ -1,6 +1,6 @@
 <script type="text/javascript">
   var MyWayAppCtrl = function($scope, $http, $location) {
-  <!-- $scope.pwd = 'home/<%= @pwd %>'; -->
+    $scope.pwd = 'home/<%= @pwd %>';
     $scope.location = $location.path();
     $scope.files = [];
     $http({
@@ -27,45 +27,48 @@
   };
 </script>
 
-
-<div class="container">
+<div class="container" ng-controller="MyWayAppCtrl">
 
   <div class="page-header">
-    <h1>My Way</h1>
-    <p class="lead">your local file server</p>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="dir-list">
+          <%= dir_list(@pwd) %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div ng-controller="DirCreateModalCtrl">
+          <script type="text/ng-template" id="dirCreateContent.html">
+            <div class="modal-header">
+              <h3>フォルダ作成</h3>
+            </div>
+            <div class="modal-body">
+              <input type="text" ng-model="input.dir_name" class="form-control" placeholder="フォルダ名"/>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" ng-click="ok()">作成</button>
+              <button class="btn btn-warning" ng-click="cancel()">キャンセル</button>
+            </div>
+          </script>
+          <button class="btn btn-default" ng-click="open()">フォルダ作成</button>
+        </div><!-- /ng-controller="DirCreateModalCtrl" -->
+      </div>
+
+    </div>
   </div>
 
-  <div ng-controller="MyWayAppCtrl">
-    <h1>{{ pwd }}</h1>
-
+  <div class="browse-main">
     <% if @files %>
       <ul ng-repeat="file in files" class="browse">
-        <li class="row">
+        <li class="browse-line row">
           <div class="col-md-4 filename"><a href='{{ file.file_path }}'>{{ file.name }}</a></div>
           <div class="col-md-4 kind">{{ file.mime_type }}</div>
-          <div class="col-md-4 modified">{{ file.modified }}</div>
+          <div class="col-md-3 modified">{{ file.modified }}</div>
+          <div class="col-md-1"></div>
         </li>
       </ul>
     <% end %>
-
-    <div ng-controller="DirCreateModalCtrl">
-      <script type="text/ng-template" id="dirCreateContent.html">
-        <div class="modal-header">
-          <h3>フォルダ作成</h3>
-        </div>
-        <div class="modal-body">
-          <input type="text" ng-model="input.dir_name" class="form-control" placeholder="フォルダ名"/>
-          input: <b>{{ input.dir_name }}</b>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" ng-click="ok()">作成</button>
-          <button class="btn btn-warning" ng-click="cancel()">キャンセル</button>
-        </div>
-      </script>
-
-      <button class="btn btn-default" ng-click="open()">フォルダ作成</button>
-      <div ng-show="input_dir_name">Input: {{ input_dir_name }}</div>
-    </div>
-  </div><!-- /ng-contoller="MyWayAppCtrl" -->
+  </div>
 
 </div><!-- /.container -->

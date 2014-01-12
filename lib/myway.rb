@@ -84,14 +84,14 @@ class MyWay < Sinatra::Base
   end
 
   post '/create_dir' do
-    # p params#['dir_name']
     dir_name = params['dir_name']
-    pwd      = params['pwd'].gsub('home/', BASE_FILE_PATH)
+    pwd      = params['pwd'].gsub('home', BASE_FILE_PATH)
 
-    # puts "#{pwd}#{dir_name}"
-    Dir.mkdir("#{pwd}#{dir_name}")
+    Dir.mkdir("#{pwd}/#{dir_name}")
 
-    redirect pwd
+    set_file_info(BASE_FILE_PATH, params['pwd'].gsub('home/', ''))
+    json @files
+    # redirect "/#{params['pwd']}"
   end
 
   get '/' do
@@ -121,5 +121,33 @@ class MyWay < Sinatra::Base
     uri        = file_path.gsub('./upload', '/file')
     parent_uri = File.dirname(file_path).gsub('./upload', '')
     halt erb "static_file".to_sym, :locals => { uri: uri, name: file_name, type: mime_type, parent_uri: parent_uri }
+  end
+
+  helpers do
+    def dir_list(pwd)
+      ret = ""
+      dir_list = pwd.split('/')
+
+      if dir_list.length < 2
+        ret += "<a href='/home' class='dir-link'>home</a>"
+        if dir_list.length == 1
+          ret += "&nbsp;>&nbsp;"
+          ret += "<a href='/home/#{dir_list[0]}' class='dir-link'>#{dir_list[0]}</a>"
+        end
+      else
+        url = "/home"
+        ret += "...&nbsp;>&nbsp;"
+        dir_list.each_with_index do |dir, i|
+          url += "/#{dir}"
+          if i == (dir_list.length - 2)
+            ret += "<a href='#{url}' class='dir-link'>#{dir_list[i]}</a>"
+            ret += "&nbsp;>&nbsp;"
+          elsif i == (dir_list.length - 1)
+            ret += "<a href='#{url}' class='dir-link'>#{dir_list[i]}</a>"
+          end
+        end
+      end
+      return ret
+    end
   end
 end
