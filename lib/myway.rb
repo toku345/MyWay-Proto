@@ -70,17 +70,17 @@ class MyWay < Sinatra::Base
   end
 
   post '/upload' do
+    # p params[:file]
+    path = params[:path].gsub('/home', '')
     if params[:file]
-      upload_path = "#{BASE_FILE_PATH}/#{params[:file][:filename]}"
+      upload_path = "#{BASE_FILE_PATH}#{path}/#{params[:file][:filename]}"
       File.open(upload_path, "wb") do |f|
         f.write params[:file][:tempfile].read
-        @result = "アップロード成功"
       end
-    else
-      @result = "アップロード失敗"
     end
 
-    erb :upload
+    set_file_info(BASE_FILE_PATH, @pwd)
+    halt json @files
   end
 
   post '/create_dir' do

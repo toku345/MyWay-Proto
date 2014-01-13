@@ -15,7 +15,8 @@
   "dependencies": {
     "bootstrap": "~3.0.3",
     "angular-ui-bootstrap": "~0.9.0",
-    "angular": "~1.2.7"
+    "angular": "~1.2.7",
+    "angularjs-file-upload": "~1.2.3"
   },
   "exportsOverride": {
     "jquery": {},
@@ -27,6 +28,9 @@
     },
     "angular-ui-bootstrap": {
       "js": "dist/*.js"
+    },
+    "angularjs-file-upload": {
+      "js": "**/*.js"
     }
   }
 }

@@ -48,3 +48,18 @@
 
 .dir-list .dir-link {
 }
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 560px;
+    height: 150px;
+    text-align: center;
+    padding-top: 35px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.drop-box.dragover {
+    border: 5px dashed blue;
+}

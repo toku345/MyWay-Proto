@@ -1,7 +1,7 @@
 <script type="text/javascript">
-  var MyWayAppCtrl = function($scope, $http, $location) {
-    $scope.pwd = 'home/<%= @pwd %>';
-    $scope.location = $location.path();
+  var path = '/home/<%= @pwd %>';
+  var MyWayAppCtrl = function($scope, $location, $http) {
+    $scope.location = $location.absUrl();
     $scope.files = [];
     $http({
       method: 'GET',
@@ -26,6 +26,7 @@
     });
   };
 </script>
+<script type="text/javascript" src="/assets/js/app.js"></script>
 
 <div class="container" ng-controller="MyWayAppCtrl">
 
@@ -38,21 +39,55 @@
       </div>
 
       <div class="col-md-4">
-        <div ng-controller="DirCreateModalCtrl">
-          <script type="text/ng-template" id="dirCreateContent.html">
-            <div class="modal-header">
-              <h3>フォルダ作成</h3>
-            </div>
-            <div class="modal-body">
-              <input type="text" ng-model="input.dir_name" class="form-control" placeholder="フォルダ名"/>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-primary" ng-click="ok()">作成</button>
-              <button class="btn btn-warning" ng-click="cancel()">キャンセル</button>
-            </div>
-          </script>
-          <button class="btn btn-default" ng-click="open()">フォルダ作成</button>
-        </div><!-- /ng-controller="DirCreateModalCtrl" -->
+        <div class="row">
+
+          <div ng-controller="DirCreateModalCtrl" class="col-md-4">
+            <script type="text/ng-template" id="dirCreateContent.html">
+              <div class="modal-header">
+                <h3>フォルダ作成</h3>
+              </div>
+              <div class="modal-body">
+                <input type="text" ng-model="input.dir_name" class="form-control" placeholder="フォルダ名"/>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">作成</button>
+                <button class="btn btn-warning" ng-click="cancel()">キャンセル</button>
+              </div>
+            </script>
+            <button class="btn btn-default" ng-click="open()">フォルダ作成</button>
+          </div><!-- /ng-controller="DirCreateModalCtrl" -->
+
+          <div ng-controller="UploadModalCtrl" class="col-md-8">
+            <script type="text/ng-template" id="uploadContent.html">
+              <div class="modal-header">
+                <h3>ファイルアップロード</h3>
+              </div>
+              <div class="modal-body">
+
+                <div ng-controller="UploadCtrl">
+                  <input type="hidden" ng-model="uploadPath" value="{{ pwd }}">
+                  <input type="file" ng-file-select="onFileSelect($files)" multiple>
+                  <div ng-show="dropSupported" class="drop-box" ng-file-drop="onFileSelect($files);"
+                       ng-file-drop-available="dropSupported=true" ng-file-drag-over-class="optional-css-class">
+                    ファイルをドロップして下さい
+                  </div>
+                  <div ng-show="!dropSupported">
+                    お使いのブラウザではファイルドロップには対応していません。<br>
+                    「ファイル選択」でファイルを選択してアップロードして下さい。
+                  </div>
+                  <button ng-click="upload.abort()" class="btn">ファイルアップロード中止</button>
+                  <div ng-show="message">{{ message }}<div>
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="close()">閉じる</button>
+              </div>
+            </script>
+            <button class="btn btn-default" ng-click="open()">ファイルアップロード</button>
+          </div><!-- /ng-controller="UploadModalCtrl" -->
+
+        </div>
       </div>
 
     </div>
