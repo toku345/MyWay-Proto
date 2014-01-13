@@ -14,9 +14,9 @@
   ],
   "dependencies": {
     "bootstrap": "~3.0.3",
-    "angular-ui-bootstrap": "~0.9.0",
     "angular": "~1.2.7",
-    "angularjs-file-upload": "~1.2.3"
+    "angularjs-file-upload": "~1.2.3",
+    "angular-ui-bootstrap-bower": "~0.9.0"
   },
   "exportsOverride": {
     "jquery": {},
@@ -26,8 +26,8 @@
     "angular": {
       "js": "**/*.js"
     },
-    "angular-ui-bootstrap": {
-      "js": "dist/*.js"
+    "angular-ui-bootstrap-bower": {
+      "js": "**/*.js"
     },
     "angularjs-file-upload": {
       "js": "**/*.js"

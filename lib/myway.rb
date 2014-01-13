@@ -31,6 +31,9 @@ class MyWay < Sinatra::Base
   end
 
   get '/home/*' do
+
+    puts params[:splat]
+
     @pwd = params[:splat][0].gsub('..', '')
 
     if File.exists?("#{BASE_FILE_PATH}/#{@pwd}")
@@ -80,11 +83,15 @@ class MyWay < Sinatra::Base
 
   post '/create_dir' do
     dir_name = params['dir_name']
-    pwd      = params['pwd'].gsub('/home/', BASE_FILE_PATH)
+    pwd      = params['pwd'].gsub('/home', BASE_FILE_PATH)
+
+    if pwd =~ /\/$/
+      pwd.chop!
+    end
 
     Dir.mkdir("#{pwd}/#{dir_name}")
 
-    set_file_info(BASE_FILE_PATH, params['pwd'].gsub('home/', ''))
+    set_file_info(BASE_FILE_PATH, params['pwd'].gsub('/home/', ''))
     json @files
   end
 
