@@ -16,6 +16,7 @@ var DirCreateModalCtrl = function($scope, $modal, $log, $http, $upload) {
 
     modalInstance.result.then(
       function(dir_name) {
+        $scope.pwd = path;
         $scope.input_dir_name = dir_name;
         $http({
           url: '/create_dir',

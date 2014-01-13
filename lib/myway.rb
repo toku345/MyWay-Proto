@@ -1,11 +1,7 @@
 # coding: utf-8
 require 'sinatra/base'
 require 'sinatra/json'
-# require 'ostruct'
-# require 'time'
 require 'json'
-
-# require 'pp'
 
 BASE_FILE_PATH = './upload/home'
 
@@ -70,7 +66,6 @@ class MyWay < Sinatra::Base
   end
 
   post '/upload' do
-    # p params[:file]
     path = params[:path].gsub('/home', '')
     if params[:file]
       upload_path = "#{BASE_FILE_PATH}#{path}/#{params[:file][:filename]}"
@@ -85,13 +80,12 @@ class MyWay < Sinatra::Base
 
   post '/create_dir' do
     dir_name = params['dir_name']
-    pwd      = params['pwd'].gsub('home', BASE_FILE_PATH)
+    pwd      = params['pwd'].gsub('/home/', BASE_FILE_PATH)
 
     Dir.mkdir("#{pwd}/#{dir_name}")
 
     set_file_info(BASE_FILE_PATH, params['pwd'].gsub('home/', ''))
     json @files
-    # redirect "/#{params['pwd']}"
   end
 
   get '/' do
